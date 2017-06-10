@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("ProcessLauncher")]
+[assembly: AssemblyTitle("CSPSC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ProcessLauncher")]
+[assembly: AssemblyProduct("CSPSC")]
 [assembly: AssemblyCopyright("Copyright © taroxd 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,9 +20,9 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("7e8079a6-986a-498a-a16d-caf23722f573")]
+[assembly: Guid("65952299-c4a0-49df-9252-b6f10adec8da")]
 
-// 程序集的版本信息由下列四个值组成: 
+// 程序集的版本信息由下列四个值组成:
 //
 //      主版本
 //      次版本

@@ -13,9 +13,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DoNothing", "DoNothing\DoNo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WUClean", "WUClean\WUClean.csproj", "{4291F794-DD1B-4F42-BF86-3EBDF4BC787C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessLauncherC", "ProcessLauncherC\ProcessLauncherC.csproj", "{65952299-C4A0-49DF-9252-B6F10ADEC8DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSPSC", "CSPSC\CSPSC.csproj", "{65952299-C4A0-49DF-9252-B6F10ADEC8DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessLauncher", "ProcessLauncher\ProcessLauncher.csproj", "{7E8079A6-986A-498A-A16D-CAF23722F573}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSPS", "CSPS\CSPS.csproj", "{7E8079A6-986A-498A-A16D-CAF23722F573}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

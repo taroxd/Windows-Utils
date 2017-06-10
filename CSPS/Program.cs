@@ -7,11 +7,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProcessLauncher
+namespace CSPS
 {
     class Program
     {
-
         private static string[] Args = null;
         private static string currentArg = null;
         private static int argIndex = 0;
@@ -273,9 +272,9 @@ namespace ProcessLauncher
         {
 #if CONSOLE
             Console.Write(
-                "Usage: ProcessLauncherC [OPTIONS] FILE [ARGS]\r\n" +
-                "       ProcessLauncherC [OPTIONS] /c FILE [ARG1 ARG2 ...]\r\n" +
-                "Start a command with various options.\r\n" +
+                "Usage: cspsc [OPTIONS] FILE [ARGS]\r\n" +
+                "       cspsc [OPTIONS] /c FILE [ARG1 ARG2 ...]\r\n" +
+                "Start a process with various options.\r\n" +
                 "\r\n" +
                 "/?, /h, /help    display this help and exit\r\n" +
                 "/c FILE [ARG1 ARG2 ...]\r\n" +
