@@ -269,6 +269,7 @@ namespace ProcessLauncher
             Environment.Exit(1);
 
         }
+
 #if CONSOLE
         private static void DisplayHelpAndExit()
         {
