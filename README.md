@@ -34,8 +34,10 @@ Warning: This is a very slow operation, after which you will not be able to unin
 
 ## ProcessLauncher / ProcessLauncherC
 
-`ProcessLauncher [OPTIONS] FILE [ARGS]`
-`ProcessLauncher [OPTIONS] /c FILE [ARG1 ARG2 ...]`
+```
+ProcessLauncher [OPTIONS] FILE [ARGS]
+ProcessLauncher [OPTIONS] /c FILE [ARG1 ARG2 ...]
+```
 
 Start a command with various options.
 

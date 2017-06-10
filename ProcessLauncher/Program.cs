@@ -30,12 +30,12 @@ namespace ProcessLauncher
         {
             Args = args;
             argLength = args.Length;
-#if CONSOLE
+
             if (argLength == 0)
             {
                 DisplayHelpAndExit();
             }
-#endif
+
             var procInfo = new ProcessStartInfo()
             {
 #if CONSOLE
@@ -48,13 +48,11 @@ namespace ProcessLauncher
                 currentArg = args[argIndex];
                 switch (currentArg)
                 {
-#if CONSOLE
                     case "/help":
                     case "/h":
                     case "/?":
                         DisplayHelpAndExit();
                         break;
-#endif
                     case "/c":
                         procInfo.FileName = TryFetchNextArgument();
 
@@ -270,9 +268,10 @@ namespace ProcessLauncher
 
         }
 
-#if CONSOLE
+
         private static void DisplayHelpAndExit()
         {
+#if CONSOLE
             Console.Write(
                 "Usage: ProcessLauncherC [OPTIONS] FILE [ARGS]\r\n" +
                 "       ProcessLauncherC [OPTIONS] /c FILE [ARG1 ARG2 ...]\r\n" +
@@ -303,8 +302,8 @@ namespace ProcessLauncher
                 "/pr, /priority N\r\n" +
                 "                 set process priority (0-5)  [default: 2]\r\n"
             );
-            Environment.Exit(0);
-        }
 #endif
+            Environment.Exit(1);
+        }
     }
 }
