@@ -36,11 +36,13 @@ namespace ProcessLauncher
                 DisplayHelpAndExit();
             }
 #endif
-            var procInfo = new ProcessStartInfo();
-#if !DEBUG
-            try
+            var procInfo = new ProcessStartInfo()
             {
+#if CONSOLE
+                UseShellExecute = false
 #endif
+            };
+
             for (; argIndex < argLength; ++argIndex)
             {
                 currentArg = args[argIndex];
@@ -53,9 +55,33 @@ namespace ProcessLauncher
                         DisplayHelpAndExit();
                         break;
 #endif
-                    case "/arg":
-                    case "/args":
-                        procInfo.Arguments = TryFetchNextArgument();
+                    case "/c":
+                        procInfo.FileName = TryFetchNextArgument();
+
+                        if (argIndex + 1 < argLength)
+                        {
+                            #region Set Remaining Arguments
+                            // use argIndex as string index
+                            argIndex = 0;
+                            currentArg = Environment.CommandLine;
+                            currentArg = currentArg.Substring(currentArg.IndexOf("/c ") + 3);
+
+                            // trim FILE
+                            if (currentArg[argIndex] == '"')
+                            {
+                                argIndex = currentArg.IndexOf("\" ", argIndex + 1, StringComparison.Ordinal);
+                            }
+                            else
+                            {
+                                argIndex = currentArg.IndexOf(' ', argIndex);
+                            }
+
+                            while (currentArg[++argIndex] == ' ') ;
+
+                            procInfo.Arguments = currentArg.Substring(argIndex);
+                            #endregion
+                        }
+                        argIndex = argLength; // break outer loop
                         break;
                     case "/env":
                     case "/e":
@@ -92,21 +118,32 @@ namespace ProcessLauncher
                     case "/se":
                         procInfo.UseShellExecute = true;
                         break;
+                    case "/nse":
+                        procInfo.UseShellExecute = false;
+                        break;
                     case "/j":
-                        processorAffinity = int.Parse(TryFetchNextArgument());
+                        int.TryParse(TryFetchNextArgument(), out processorAffinity);
                         if (processorAffinity > 0 && processorAffinity < 32)
                         {
                             processorAffinity = (1 << processorAffinity) - 1;
+                        }
+                        else
+                        {
+                            WriteErrorAndExit("Invalid argument for /j");
                         }
                         break;
                     case "/j1":
                         processorAffinity = 1;
                         break;
                     case "/pa":
-                        processorAffinity = int.Parse(TryFetchNextArgument());
+                        if (!int.TryParse(TryFetchNextArgument(), out processorAffinity))
+                        {
+                            WriteErrorAndExit("Invalid argument for /pa");
+                        }
                         break;
                     case "/pr":
                     case "/priority":
+                        #region Process Priority
                         switch (TryFetchNextArgument())
                         {
                             case "0":
@@ -140,29 +177,45 @@ namespace ProcessLauncher
                                 Environment.Exit(1);
                                 break;
                         }
+                        #endregion
                         break;
                     default:
                         if (currentArg.StartsWith("/"))
                         {
-#if CONSOLE
-                            Console.Error.WriteLine("unknown option: " + currentArg);
-#endif
-                            Environment.Exit(1);
+                            WriteErrorAndExit(currentArg + ": Invalid option");
                         }
                         procInfo.FileName = currentArg;
+
+                        // argIndex now points at filename, increase 1 to point at arguments
+                        ++argIndex;
+
+                        if (argIndex > argLength)            // no arguments
+                        {
+
+                        }
+                        else if (argIndex == argLength - 1)  // only one argument
+                        {
+                            procInfo.Arguments = args[argIndex];
+                        }
+                        else
+                        {
+                            // Not reliable. For more reliable arguments, use /c
+                            procInfo.Arguments = String.Join(" ", args.Skip(argIndex));
+                        }
+
+                        argIndex = argLength; // break outer loop
                         break;
                 }
             }
 
-#if CONSOLE
-            if (wait && !procInfo.UseShellExecute)
+            if (String.IsNullOrEmpty(procInfo.FileName))
             {
-                procInfo.RedirectStandardOutput = true;
-                procInfo.RedirectStandardInput = true;
-                procInfo.RedirectStandardError = true;
+                WriteErrorAndExit("No file given");
             }
+#if !DEBUG
+            try
+            {
 #endif
-
             if (cdToProgram)
             {
                 procInfo.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(procInfo.FileName));
@@ -187,43 +240,48 @@ namespace ProcessLauncher
             }
 #if !DEBUG
             }
-#pragma warning disable CS0168 // unused variable e without CONSOLE
             catch (Exception e)
-#pragma warning restore CS0168 // unused variable e
             {
-#if CONSOLE
-                Console.Error.WriteLine(e.Message);
-#endif
-                Environment.Exit(1);
+                WriteErrorAndExit(e.Message);
             }
 #endif
         }
 
         private static string TryFetchNextArgument()
         {
-            if (argLength > argIndex)
+            if (argLength > ++argIndex)
             {
-                return Args[++argIndex];
+                return Args[argIndex];
             }
             else
             {
-#if CONSOLE
-                Console.Error.WriteLine("Missing arguments");
-#endif
-                Environment.Exit(1);
+                WriteErrorAndExit("Missing arguments");
                 return null;
             }
         }
 
+
+        private static void WriteErrorAndExit(string errorMessage)
+        {
+#if CONSOLE
+            Console.Error.WriteLine(errorMessage);
+#endif
+            Environment.Exit(1);
+
+        }
 #if CONSOLE
         private static void DisplayHelpAndExit()
         {
             Console.Write(
-                "Usage: ProcessLauncherC [OPTIONS] FILE\r\n" +
-                "Start a process with various options.\r\n" +
+                "Usage: ProcessLauncherC [OPTIONS] FILE [ARGS]\r\n" +
+                "       ProcessLauncherC [OPTIONS] /c FILE [ARG1 ARG2 ...]\r\n" +
+                "Start a command with various options.\r\n" +
                 "\r\n" +
                 "/?, /h, /help    display this help and exit\r\n" +
-                "/arg, /args      arguments passed to the executable as a single string\r\n" +
+                "/c FILE [ARG1 ARG2 ...]\r\n" +
+                "                 execute specfied command.\r\n" +
+                "                   /c must be after all options.\r\n" +
+                "                   Anything after /c will be command." +
                 "/e, /env KEY VALUE\r\n" +
                 "                 set environment variable\r\n" +
                 "                   This option can be passed for multiple times\r\n" +
@@ -231,14 +289,13 @@ namespace ProcessLauncher
                 "                   Alias of /env __COMPAT_LAYER RUNASINVOKER\r\n" +
                 "/wd DIR          set working directory\r\n" +
                 "/cd              set working directory to the same as FILE\r\n" +
-                "/se              use ShellExecute\r\n" +
-                "/v, /verb        use ShellExecute with specified verb\r\n" +
+                "/nse             no ShellExecute [CLI default]\r\n" +
+                "/se              use ShellExecute [win32 default]\r\n" +
+                "/v, /verb VERB   use ShellExecute with specified verb\r\n" +
                 "/admin           alias of /verb runas\r\n" +
-                "/w, /wait        wait for the process to exit\r\n" +
-                "                   Default for command line version.\r\n" +
-                "/nw, /nowait     does not wait for the process to exit\r\n" +
-                "                   Default for win32 version.\r\n" +
-                "/pa              set processor affinity of the process\r\n" +
+                "/w, /wait        wait for the process to exit [CLI default]\r\n" +
+                "/nw, /nowait     no wait for the process to exit [win32 default]\r\n" +
+                "/pa N            set processor affinity of the process\r\n" +
                 "/j N             use only N processors\r\n" +
                 "                   Alias of /pa ${2**n - 1}\r\n" +
                 "/j1              alias of /pa 1 or /j 1\r\n" +
