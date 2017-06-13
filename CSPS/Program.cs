@@ -58,10 +58,13 @@ namespace CSPS
                         if (argIndex + 1 < argLength)
                         {
                             #region Set Remaining Arguments
-                            // use argIndex as string index
-                            argIndex = 0;
+
                             currentArg = Environment.CommandLine;
-                            currentArg = currentArg.Substring(currentArg.IndexOf("/c ") + 3);
+
+                            // use argIndex as string index
+                            argIndex = currentArg.IndexOf("/c ", StringComparison.Ordinal) + 2;
+
+                            while (currentArg[++argIndex] == ' ') ;
 
                             // trim FILE
                             if (currentArg[argIndex] == '"')
