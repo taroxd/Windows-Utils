@@ -1,4 +1,4 @@
-00Windows Utils
+Windows Utils
 ===
 Some simple utilities for daily use.
 
