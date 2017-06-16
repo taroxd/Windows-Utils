@@ -277,13 +277,13 @@ namespace CSPS
             Console.Write(
                 "Usage: cspsc [OPTIONS] FILE [ARGS]\r\n" +
                 "       cspsc [OPTIONS] /c FILE [ARG1 ARG2 ...]\r\n" +
-                "Start a process with various options.\r\n" +
+                "Start a process with various options\r\n" +
                 "\r\n" +
                 "/?, /h, /help    display this help and exit\r\n" +
                 "/c FILE [ARG1 ARG2 ...]\r\n" +
-                "                 execute specfied command.\r\n" +
-                "                   /c must be after all options.\r\n" +
-                "                   Anything after /c will be command." +
+                "                 execute specfied command\r\n" +
+                "                   /c must be after all options\r\n" +
+                "                   Anything after /c will be command\r\n" +
                 "/e, /env KEY VALUE\r\n" +
                 "                 set environment variable\r\n" +
                 "                   This option can be passed for multiple times\r\n" +
