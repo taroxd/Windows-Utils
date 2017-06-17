@@ -286,6 +286,7 @@ namespace CSPS
             }
         }
 
+#if CONSOLE
         private static void DisplayHelp()
         {
             Console.Write(
@@ -348,5 +349,6 @@ namespace CSPS
                 "    set process priority (0-5)  [default: 2]\r\n"
             );
         }
+#endif
     }
 }
