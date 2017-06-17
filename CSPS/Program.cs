@@ -129,7 +129,10 @@ namespace CSPS
                         }
                         else
                         {
-                            DisplayErrorAndExit("Invalid argument for /j");
+#if CONSOLE
+                            Console.Error.WriteLine("Invalid argument for /j");
+#endif
+                            Environment.Exit(1);
                         }
                         break;
                     case "/j1":
@@ -138,7 +141,10 @@ namespace CSPS
                     case "/pa":
                         if (!int.TryParse(TryFetchNextArgument(), out processorAffinity))
                         {
-                            DisplayErrorAndExit("Invalid argument for /pa");
+#if CONSOLE
+                            Console.Error.WriteLine("Invalid argument for /pa");
+#endif
+                            Environment.Exit(1);
                         }
                         break;
                     case "/pr":
@@ -171,7 +177,10 @@ namespace CSPS
                                 priority = ProcessPriorityClass.RealTime;
                                 break;
                             default:
-                                DisplayErrorAndExit("unknown priority");
+#if CONSOLE
+                                Console.Error.WriteLine("unknown priority");
+#endif
+                                Environment.Exit(1);
                                 break;
                         }
                         #endregion
@@ -179,7 +188,10 @@ namespace CSPS
                     default:
                         if (currentArg.StartsWith("/"))
                         {
-                            DisplayErrorAndExit(currentArg + ": Invalid option");
+#if CONSOLE
+                            Console.Error.WriteLine(currentArg + ": Invalid option");
+#endif
+                            Environment.Exit(1);
                         }
                         procInfo.FileName = currentArg;
 
@@ -207,7 +219,10 @@ namespace CSPS
 
             if (String.IsNullOrEmpty(procInfo.FileName))
             {
-                DisplayErrorAndExit("No file given");
+#if CONSOLE
+                Console.Error.WriteLine("No file given");
+#endif
+                Environment.Exit(1);
             }
 #if !DEBUG
             try
@@ -239,7 +254,10 @@ namespace CSPS
             }
             catch (Exception e)
             {
-                DisplayErrorAndExit(e.Message);
+#if CONSOLE
+                Console.Error.WriteLine(e.Message);
+#endif
+                Environment.Exit(1);
             }
 #endif
         }
@@ -252,21 +270,13 @@ namespace CSPS
             }
             else
             {
-                DisplayErrorAndExit("Missing arguments");
+#if CONSOLE
+                Console.Error.WriteLine("Missing arguments");
+#endif
+                Environment.Exit(1);
                 return null;
             }
         }
-
-
-        private static void DisplayErrorAndExit(string errorMessage)
-        {
-#if CONSOLE
-            Console.Error.WriteLine(errorMessage);
-#endif
-            Environment.Exit(1);
-
-        }
-
 
         private static void DisplayHelpAndExit()
         {
@@ -274,32 +284,61 @@ namespace CSPS
             Console.Write(
                 "Usage: cspsc [OPTIONS] FILE [ARGS]\r\n" +
                 "       cspsc [OPTIONS] /c FILE [ARG1 ARG2 ...]\r\n" +
+                "\r\n" +
                 "Start a process with various options\r\n" +
                 "\r\n" +
-                "/?, /h, /help    display this help and exit\r\n" +
+                "/?, /h, /help\r\n" +
+                "    display this help and exit\r\n" +
+                "\r\n" +
                 "/c FILE [ARG1 ARG2 ...]\r\n" +
-                "                 execute specfied command\r\n" +
-                "                   /c must be after all options\r\n" +
-                "                   Anything after /c will be command\r\n" +
+                "    execute specfied command\r\n" +
+                "    /c must be after all options\r\n" +
+                "    Anything after /c will be command\r\n" +
+                "\r\n" +
                 "/e, /env KEY VALUE\r\n" +
-                "                 set environment variable\r\n" +
-                "                   This option can be passed for multiple times\r\n" +
-                "/na, /noadmin    try to suppress UAC prompt\r\n" +
-                "                   Alias of /env __COMPAT_LAYER RUNASINVOKER\r\n" +
-                "/wd DIR          set working directory\r\n" +
-                "/cd              set working directory to the same as FILE\r\n" +
-                "/nse             no ShellExecute [CLI default]\r\n" +
-                "/se              use ShellExecute [win32 default]\r\n" +
-                "/v, /verb VERB   use ShellExecute with specified verb\r\n" +
-                "/admin           alias of /verb runas\r\n" +
-                "/w, /wait        wait for the process to exit [CLI default]\r\n" +
-                "/nw, /nowait     no wait for the process to exit [win32 default]\r\n" +
-                "/pa N            set processor affinity of the process\r\n" +
-                "/j N             use only N processors\r\n" +
-                "                   Alias of /pa ${2**n - 1}\r\n" +
-                "/j1              alias of /pa 1 or /j 1\r\n" +
+                "    set environment variable\r\n" +
+                "    This option can be passed for multiple times\r\n" +
+                "\r\n" +
+                "/na, /noadmin\r\n" +
+                "    try to suppress UAC prompt\r\n" +
+                "    Alias of /env __COMPAT_LAYER RUNASINVOKER\r\n" +
+                "\r\n" +
+                "/wd DIR\r\n" +
+                "    set working directory\r\n" +
+                "\r\n" +
+                "/cd\r\n" +
+                "    set working directory to the same as FILE\r\n" +
+                "\r\n" +
+                "/nse\r\n" +
+                "    no ShellExecute [CLI default]\r\n" +
+                "\r\n" +
+                "/se\r\n" +
+                "    use ShellExecute [win32 default]\r\n" +
+                "\r\n" +
+                "/v, /verb VERB\r\n" +
+                "    use ShellExecute with specified verb\r\n" +
+                "\r\n" +
+                "/admin\r\n" +
+                "    alias of /verb runas\r\n" +
+                "\r\n" +
+                "/w, /wait\r\n" +
+                "    wait for the process to exit [CLI default]\r\n" +
+                "\r\n" +
+                "/nw, /nowait\r\n" +
+                "    no wait for the process to exit [win32 default]\r\n" +
+                "\r\n" +
+                "/pa N\r\n" +
+                "    set processor affinity of the process\r\n" +
+                "\r\n" +
+                "/j N\r\n" +
+                "    use only N processors\r\n" +
+                "    Alias of /pa ${2**n - 1}\r\n" +
+                "\r\n" +
+                "/j1\r\n" +
+                "    alias of /pa 1 or /j 1\r\n" +
+                "\r\n" +
                 "/pr, /priority N\r\n" +
-                "                 set process priority (0-5)  [default: 2]\r\n"
+                "    set process priority (0-5)  [default: 2]\r\n"
             );
 #endif
             Environment.Exit(1);
