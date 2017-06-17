@@ -86,10 +86,10 @@ namespace CSPS
                     case "/env":
                     case "/e":
                         Environment.SetEnvironmentVariable(TryFetchNextArgument(), TryFetchNextArgument());
-                        cdToProgram = false;
                         break;
                     case "/wd":
                         procInfo.WorkingDirectory = TryFetchNextArgument();
+                        cdToProgram = false;
                         break;
                     case "/cd":
                         cdToProgram = true;
