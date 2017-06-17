@@ -129,7 +129,7 @@ namespace CSPS
                         }
                         else
                         {
-                            WriteErrorAndExit("Invalid argument for /j");
+                            DisplayErrorAndExit("Invalid argument for /j");
                         }
                         break;
                     case "/j1":
@@ -138,7 +138,7 @@ namespace CSPS
                     case "/pa":
                         if (!int.TryParse(TryFetchNextArgument(), out processorAffinity))
                         {
-                            WriteErrorAndExit("Invalid argument for /pa");
+                            DisplayErrorAndExit("Invalid argument for /pa");
                         }
                         break;
                     case "/pr":
@@ -171,10 +171,7 @@ namespace CSPS
                                 priority = ProcessPriorityClass.RealTime;
                                 break;
                             default:
-#if CONSOLE
-                                Console.Error.WriteLine("unknown priority");
-#endif
-                                Environment.Exit(1);
+                                DisplayErrorAndExit("unknown priority");
                                 break;
                         }
                         #endregion
@@ -182,7 +179,7 @@ namespace CSPS
                     default:
                         if (currentArg.StartsWith("/"))
                         {
-                            WriteErrorAndExit(currentArg + ": Invalid option");
+                            DisplayErrorAndExit(currentArg + ": Invalid option");
                         }
                         procInfo.FileName = currentArg;
 
@@ -210,7 +207,7 @@ namespace CSPS
 
             if (String.IsNullOrEmpty(procInfo.FileName))
             {
-                WriteErrorAndExit("No file given");
+                DisplayErrorAndExit("No file given");
             }
 #if !DEBUG
             try
@@ -242,7 +239,7 @@ namespace CSPS
             }
             catch (Exception e)
             {
-                WriteErrorAndExit(e.Message);
+                DisplayErrorAndExit(e.Message);
             }
 #endif
         }
@@ -255,13 +252,13 @@ namespace CSPS
             }
             else
             {
-                WriteErrorAndExit("Missing arguments");
+                DisplayErrorAndExit("Missing arguments");
                 return null;
             }
         }
 
 
-        private static void WriteErrorAndExit(string errorMessage)
+        private static void DisplayErrorAndExit(string errorMessage)
         {
 #if CONSOLE
             Console.Error.WriteLine(errorMessage);
