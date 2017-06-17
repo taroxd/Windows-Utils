@@ -32,7 +32,10 @@ namespace CSPS
 
             if (argLength == 0)
             {
-                DisplayHelpAndExit();
+#if CONSOLE
+                DisplayHelp();
+#endif
+                Environment.Exit(1);
             }
 
             var procInfo = new ProcessStartInfo()
@@ -50,7 +53,10 @@ namespace CSPS
                     case "/help":
                     case "/h":
                     case "/?":
-                        DisplayHelpAndExit();
+#if CONSOLE
+                        DisplayHelp();
+#endif
+                        Environment.Exit(1);
                         break;
                     case "/c":
                         procInfo.FileName = TryFetchNextArgument();
@@ -252,7 +258,9 @@ namespace CSPS
             }
 #if !DEBUG
             }
+#pragma warning disable CS0168 // unused variable e in Release mode
             catch (Exception e)
+#pragma warning restore CS0168
             {
 #if CONSOLE
                 Console.Error.WriteLine(e.Message);
@@ -278,9 +286,8 @@ namespace CSPS
             }
         }
 
-        private static void DisplayHelpAndExit()
+        private static void DisplayHelp()
         {
-#if CONSOLE
             Console.Write(
                 "Usage: cspsc [OPTIONS] FILE [ARGS]\r\n" +
                 "       cspsc [OPTIONS] /c FILE [ARG1 ARG2 ...]\r\n" +
@@ -340,8 +347,6 @@ namespace CSPS
                 "/pr, /priority N\r\n" +
                 "    set process priority (0-5)  [default: 2]\r\n"
             );
-#endif
-            Environment.Exit(1);
         }
     }
 }
