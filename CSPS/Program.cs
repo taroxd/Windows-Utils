@@ -162,7 +162,7 @@ namespace CSPS
                         else
                         {
 #if CONSOLE
-                            Console.Error.WriteLine("Invalid argument for /j");
+                            DisplayInvalidArgument();
 #endif
                             Environment.Exit(1);
                         }
@@ -174,7 +174,7 @@ namespace CSPS
                         if (!int.TryParse(TryFetchNextArgument(), out processorAffinity))
                         {
 #if CONSOLE
-                            Console.Error.WriteLine("Invalid argument for /pa");
+                            DisplayInvalidArgument();
 #endif
                             Environment.Exit(1);
                         }
@@ -210,7 +210,7 @@ namespace CSPS
                                 break;
                             default:
 #if CONSOLE
-                                Console.Error.WriteLine("unknown priority");
+                                DisplayInvalidArgument();
 #endif
                                 Environment.Exit(1);
                                 break;
@@ -290,6 +290,12 @@ namespace CSPS
         }
 
 #if CONSOLE
+
+        private static void DisplayInvalidArgument()
+        {
+            Console.Error.WriteLine("Invalid argument for " + currentArg);
+        }
+
         private static void DisplayHelp()
         {
             Console.Write(
