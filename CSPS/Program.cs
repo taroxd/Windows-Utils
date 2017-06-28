@@ -13,6 +13,7 @@ namespace CSPS
     {
         private static string[] Args = null;
         private static string currentArg = null;
+        private static char currentArgFirst;
         private static int argIndex = 0;
         private static int argLength = 0;
         private static bool wait =
@@ -48,17 +49,42 @@ namespace CSPS
             for (; argIndex < argLength; ++argIndex)
             {
                 currentArg = args[argIndex];
-                switch (currentArg)
+                currentArgFirst = currentArg[0];
+
+                if (currentArgFirst != '/' && currentArgFirst != '-')
                 {
-                    case "/help":
-                    case "/h":
-                    case "/?":
+                    procInfo.FileName = currentArg;
+
+                    // argIndex now points at filename, increase 1 to point at arguments
+                    ++argIndex;
+
+                    if (argIndex > argLength)            // no arguments
+                    {
+
+                    }
+                    else if (argIndex == argLength - 1)  // only one argument
+                    {
+                        procInfo.Arguments = args[argIndex];
+                    }
+                    else
+                    {
+                        // Not reliable. For more reliable arguments, use /c
+                        procInfo.Arguments = String.Join(" ", args.Skip(argIndex));
+                    }
+
+                    break;
+                }
+                switch (currentArg.Substring(1))
+                {
+                    case "help":
+                    case "h":
+                    case "?":
 #if CONSOLE
                         DisplayHelp();
 #endif
                         Environment.Exit(1);
                         break;
-                    case "/c":
+                    case "c":
                         procInfo.FileName = TryFetchNextArgument();
 
                         if (argIndex + 1 < argLength)
@@ -68,7 +94,7 @@ namespace CSPS
                             currentArg = Environment.CommandLine;
 
                             // use argIndex as string index
-                            argIndex = currentArg.IndexOf("/c ", StringComparison.Ordinal) + 2;
+                            argIndex = currentArg.IndexOf(currentArgFirst + "c ", StringComparison.Ordinal) + 2;
 
                             while (currentArg[++argIndex] == ' ') ;
 
@@ -89,45 +115,45 @@ namespace CSPS
                         }
                         argIndex = argLength; // break outer loop
                         break;
-                    case "/env":
-                    case "/e":
+                    case "env":
+                    case "e":
                         Environment.SetEnvironmentVariable(TryFetchNextArgument(), TryFetchNextArgument());
                         break;
-                    case "/wd":
+                    case "wd":
                         procInfo.WorkingDirectory = TryFetchNextArgument();
                         cdToProgram = false;
                         break;
-                    case "/cd":
+                    case "cd":
                         cdToProgram = true;
                         break;
-                    case "/verb":
-                    case "/v":
+                    case "verb":
+                    case "v":
                         procInfo.Verb = TryFetchNextArgument();
                         procInfo.UseShellExecute = true;
                         break;
-                    case "/admin":
+                    case "admin":
                         procInfo.Verb = "runas";
                         procInfo.UseShellExecute = true;
                         break;
-                    case "/noadmin":
-                    case "/na":
+                    case "noadmin":
+                    case "na":
                         Environment.SetEnvironmentVariable("__COMPAT_LAYER", "RUNASINVOKER");
                         break;
-                    case "/wait":
-                    case "/w":
+                    case "wait":
+                    case "w":
                         wait = true;
                         break;
-                    case "/nowait":
-                    case "/nw":
+                    case "nowait":
+                    case "nw":
                         wait = false;
                         break;
-                    case "/se":
+                    case "se":
                         procInfo.UseShellExecute = true;
                         break;
-                    case "/nse":
+                    case "nse":
                         procInfo.UseShellExecute = false;
                         break;
-                    case "/j":
+                    case "j":
                         int.TryParse(TryFetchNextArgument(), out processorAffinity);
                         if (processorAffinity > 0 && processorAffinity < 32)
                         {
@@ -141,10 +167,10 @@ namespace CSPS
                             Environment.Exit(1);
                         }
                         break;
-                    case "/j1":
+                    case "j1":
                         processorAffinity = 1;
                         break;
-                    case "/pa":
+                    case "pa":
                         if (!int.TryParse(TryFetchNextArgument(), out processorAffinity))
                         {
 #if CONSOLE
@@ -153,8 +179,8 @@ namespace CSPS
                             Environment.Exit(1);
                         }
                         break;
-                    case "/pr":
-                    case "/priority":
+                    case "pr":
+                    case "priority":
                         #region Process Priority
                         switch (TryFetchNextArgument())
                         {
@@ -192,33 +218,10 @@ namespace CSPS
                         #endregion
                         break;
                     default:
-                        if (currentArg.StartsWith("/"))
-                        {
 #if CONSOLE
-                            Console.Error.WriteLine(currentArg + ": Invalid option");
+                        Console.Error.WriteLine(currentArg + ": Invalid option");
 #endif
-                            Environment.Exit(1);
-                        }
-                        procInfo.FileName = currentArg;
-
-                        // argIndex now points at filename, increase 1 to point at arguments
-                        ++argIndex;
-
-                        if (argIndex > argLength)            // no arguments
-                        {
-
-                        }
-                        else if (argIndex == argLength - 1)  // only one argument
-                        {
-                            procInfo.Arguments = args[argIndex];
-                        }
-                        else
-                        {
-                            // Not reliable. For more reliable arguments, use /c
-                            procInfo.Arguments = String.Join(" ", args.Skip(argIndex));
-                        }
-
-                        argIndex = argLength; // break outer loop
+                        Environment.Exit(1);
                         break;
                 }
             }
