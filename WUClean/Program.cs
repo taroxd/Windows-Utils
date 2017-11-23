@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WUClean
 {
@@ -24,9 +19,13 @@ namespace WUClean
             RunSystemProcess("cleanmgr.exe", $"/D " + system32[0]);
             RunSystemProcess("dism.exe", "/Online /Cleanup-Image /StartComponentCleanup /ResetBase");
 
-            if (Directory.Exists(updateCache))
+            try
             {
                 Directory.Delete(updateCache, true);
+            }
+            catch (Exception)
+            {
+
             }
         }
 

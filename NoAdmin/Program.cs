@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
-using System.IO;
-using Microsoft.Win32;
-using System.ComponentModel;
 
 namespace NoAdmin
 {
