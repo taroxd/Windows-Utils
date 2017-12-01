@@ -16,7 +16,7 @@ namespace WUClean
 
         static void Main(string[] args)
         {
-            RunSystemProcess("cleanmgr.exe", $"/D " + system32[0]);
+            RunSystemProcess("cleanmgr.exe", "/D " + system32[0]);
             RunSystemProcess("dism.exe", "/Online /Cleanup-Image /StartComponentCleanup /ResetBase");
 
             try
