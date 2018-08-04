@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSPSC", "CSPSC\CSPSC.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSPS", "CSPS\CSPS.csproj", "{7E8079A6-986A-498A-A16D-CAF23722F573}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CallSHChangeNotify", "CallSHChangeNotify\CallSHChangeNotify.vcxproj", "{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,8 +105,19 @@ Global
 		{7E8079A6-986A-498A-A16D-CAF23722F573}.Release|x64.Build.0 = Release|Any CPU
 		{7E8079A6-986A-498A-A16D-CAF23722F573}.Release|x86.ActiveCfg = Release|Any CPU
 		{7E8079A6-986A-498A-A16D-CAF23722F573}.Release|x86.Build.0 = Release|Any CPU
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Debug|x64.ActiveCfg = Debug|x64
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Debug|x64.Build.0 = Debug|x64
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Debug|x86.ActiveCfg = Debug|x64
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Release|Any CPU.ActiveCfg = Release|x64
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Release|x64.ActiveCfg = Release|x64
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Release|x64.Build.0 = Release|x64
+		{ECBFD0CD-232B-464C-979A-8C6F4BF580CC}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CDDF0DA4-553D-4876-A586-9FC99AD3F058}
 	EndGlobalSection
 EndGlobal

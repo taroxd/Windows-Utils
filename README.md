@@ -7,8 +7,7 @@ The projects in this solution are independent from each other, and each of them 
 ## NoAdmin
 
 `noadmin path [args]`
-
-The program sets environment variable __COMPAT_LAYER to RUNASINVOKER and launch given program.
+The program sets environment variable \_\_COMPAT_LAYER to RUNASINVOKER and launch given program.
 
 ## RunAsAdmin
 
@@ -42,3 +41,7 @@ csps [OPTIONS] /c FILE [ARG1 ARG2 ...]
 Start a process with various options.
 
 For more information, see `cspsc /?`.
+
+## CallSHChangeNotify
+
+Call Windows API function SHChangeNotify in command line.
