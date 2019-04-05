@@ -16,7 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="donothing.asm">
-      <Filter>源文件</Filter>
+      <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>
 </Project>
