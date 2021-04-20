@@ -45,3 +45,7 @@ For more information, see `cspsc /?`.
 ## CallSHChangeNotify
 
 Call Windows API function SHChangeNotify in command line.
+
+## GetInterfaceIP
+
+Get an IP address from a given net interface name.
