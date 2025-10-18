@@ -19,7 +19,7 @@ Run given program as administrator.
 
 Simply do nothing and exit.
 
-This program is used to replace unwanted executables in other softwares.
+This program is intended to replace unwanted executables in other softwares.
 
 ## WaitAndDoNothing
 
